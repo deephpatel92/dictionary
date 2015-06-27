@@ -1,5 +1,3 @@
-# yocricketscore
+# dictionary
 
-Tutorial on how to use Whatsapp on Raspberry pi and create "Yo Score" server to get live cricket score.
-
-Check out full tutorial on : http://sohilpatel.org/yocricketscore
+Save "9687019578" in your contact and get meaning of any word!

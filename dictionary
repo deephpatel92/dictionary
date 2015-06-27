@@ -1,0 +1,3 @@
+#!/bin/sh
+script='/dictionary/run.py'
+/usr/bin/python $script

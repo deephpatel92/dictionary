@@ -8,16 +8,9 @@ import datetime
 import json
 import unirest
 
-current_score = ['0', '']
 
-# Text Message to check
-message = 'YO'
-
-# World Cup series id for massap up
-WORLDCUP_ID = '2223'
-
-# Timer to update the score
-SCORE_TIMER = 5
+# word input
+wordmeaning = '';
 
 class EchoLayer(YowInterfaceLayer):
 
@@ -28,11 +21,9 @@ class EchoLayer(YowInterfaceLayer):
         if True:
             receipt = OutgoingReceiptProtocolEntity(messageProtocolEntity.getId(), messageProtocolEntity.getFrom())
 
-            if messageProtocolEntity.getBody().lower() == message.lower() :
-                response = self.GetCurrentScore()
-            else :
-                response = "Please send -YO- to get score."
-
+            wordmeaning = messageProtocolEntity.getBody().lower()
+            response = self.GetMeaning(wordmeaning)
+            
             outgoingMessageProtocolEntity = TextMessageProtocolEntity(
                 response,
                 to = messageProtocolEntity.getFrom())
@@ -45,35 +36,25 @@ class EchoLayer(YowInterfaceLayer):
         ack = OutgoingAckProtocolEntity(entity.getId(), "receipt", "delivery")
         self.toLower(ack)
 
-    def GetCurrentScore(self):
+    def GetMeaning(pWord):
 
         # Get current time
         current_time = int(time.time())
 
-        # Difference between last score and current time
-        diff = (datetime.datetime.fromtimestamp(current_time) - datetime.datetime.fromtimestamp(int(current_score[0])))
-
-        count = 1
-
-        # if Diff is more then 5 second set new score to current score else send last score
-        if diff.total_seconds() > SCORE_TIMER :
-
-            current_score[0] = str(current_time)
-
-            # These code snippets use an open-source library. http://unirest.io/python
-            response = unirest.get("https://devru-live-cricket-scores-v1.p.mashape.com/livematches.php",
-              headers={
-                "X-Mashape-Key": "f76O8zuLRNmshHWZSIZ41xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx", # use your X-Mashape-key
+        # These code snippets use an open-source library.
+        response = unirest.get("https://montanaflynn-dictionary.p.mashape.com/define?word=hello",
+            headers={
+                "X-Mashape-Key": "j6rDcjfVcVmshxp0Y102O2cL6vDrp16mL1FjsnsgRqpcl6fC3L",
                 "Accept": "application/json"
-              }
-            )
+            }
+        )
 
             data = json.dumps(response.body, separators=(',',':'))
-            matches = json.loads(data)
+            meaning = json.loads(data)
 
             current_s = ''
 
-            for match in matches :
+            for pword in meaning :
 
                 if match['srsid'] == WORLDCUP_ID :
                 

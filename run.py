@@ -12,7 +12,7 @@ from yowsup.stacks import YowStack, YOWSUP_CORE_LAYERS
 from yowsup import env
 
 
-CREDENTIALS = ("91xxxxxxxxxx", "AUPmtbvqyM8xxxxxxxxxxxxxx=") # replace with your phone and password
+CREDENTIALS = ("919687019578", "WeC8EvlHi1YtHdFPevdkOxLG1QU=") # replace with your phone and password
 
 if __name__==  "__main__":
     layers = (

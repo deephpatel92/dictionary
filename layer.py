@@ -9,9 +9,6 @@ import json
 import unirest
 
 
-# word input
-wordmeaning = '';
-
 class EchoLayer(YowInterfaceLayer):
 
     @ProtocolEntityCallback("message")
@@ -21,79 +18,45 @@ class EchoLayer(YowInterfaceLayer):
         if True:
             receipt = OutgoingReceiptProtocolEntity(messageProtocolEntity.getId(), messageProtocolEntity.getFrom())
 
-            wordmeaning = messageProtocolEntity.getBody().lower()
-            response = self.GetMeaning(wordmeaning)
-            
-            outgoingMessageProtocolEntity = TextMessageProtocolEntity(
+        wordformean = messageProtocolEntity.getBody().lower()
+        response = self.GetCurrentScore(wordformean)
+
+        outgoingMessageProtocolEntity = TextMessageProtocolEntity(
                 response,
                 to = messageProtocolEntity.getFrom())
 
-            self.toLower(receipt)
-            self.toLower(outgoingMessageProtocolEntity)
+        self.toLower(receipt)
+        self.toLower(outgoingMessageProtocolEntity)
 
     @ProtocolEntityCallback("receipt")
     def onReceipt(self, entity):
-        ack = OutgoingAckProtocolEntity(entity.getId(), "receipt", "delivery")
+        ack = OutgoingAckProtocolEntity(entity.getId(), "receipt", "delivery", entity.getFrom())
         self.toLower(ack)
 
-    def GetMeaning(pWord):
+    def GetCurrentScore(self, word):
 
-        # Get current time
-        current_time = int(time.time())
+        url = "https://montanaflynn-dictionary.p.mashape.com/define?word=" + word
 
         # These code snippets use an open-source library.
-        response = unirest.get("https://montanaflynn-dictionary.p.mashape.com/define?word=hello",
+        response = unirest.get(url,
             headers={
                 "X-Mashape-Key": "j6rDcjfVcVmshxp0Y102O2cL6vDrp16mL1FjsnsgRqpcl6fC3L",
                 "Accept": "application/json"
             }
         )
 
-            data = json.dumps(response.body, separators=(',',':'))
-            meaning = json.loads(data)
+        resp = word + '\n\n'
 
-            current_s = ''
-
-            for pword in meaning :
-
-                if match['srsid'] == WORLDCUP_ID :
-                
-                    if match['header']['mchState'] == 'inprogress' or match['header']['mchState'] == 'complete' :
-
-                        bat_id = match['miniscore']['batteamid']
-                        bowl_id = match['miniscore']['bowlteamid']
-
-                        if match['team1']['id'] == bat_id :
-                            bat_name = match['team1']['sName']
-                            bowl_name = match['team2']['sName']
-                        else :
-                            bat_name = match['team2']['sName']
-                            bowl_name = match['team1']['sName']
-
-                        score_head = match['header']['mnum']
-
-                        batting_score = str(bat_name) + ' ' + match['miniscore']['batteamscore'] + '(' + match['miniscore']['overs'] + ')'
-
-                        summary = match['miniscore']['striker']['fullName'] + ' ' + match['miniscore']['striker']['runs'] + '(' + match['miniscore']['striker']['balls'] + ')' + ', ' + match['miniscore']['nonStriker']['fullName'] + ' ' + match['miniscore']['nonStriker']['runs'] + '(' + match['miniscore']['nonStriker']['balls'] + ')'
-
-                        bowl_score = match['miniscore']['bowlteamscore'] + ' ' + str(bowl_name)
-
-                        status = match['header']['status']
-
-                        score = score_head + ': ' + batting_score + ' v ' + bowl_score + ', ' + summary + ', ' + status
-
-                        current_s = current_s + score + '\n'
-
-            current_score[1] = current_s
+        data = json.dumps(response.body, separators=(',',':'))
+        meanings = (json.loads(data))["definitions"]
+        
+        count = 0
+        for meaning in meanings:
+            count = count + 1
+            resp = resp + 'm' + str(count) +' : ' + str(meaning["text"]) + '\n\n'
 
         # Create Text response
-        text_response = current_score[1]
+        text_response = str(resp)
 
         #Return details
-        return text_response
-
-
-
-
-
-        
+        return str(text_response)

@@ -19,7 +19,7 @@ class EchoLayer(YowInterfaceLayer):
             receipt = OutgoingReceiptProtocolEntity(messageProtocolEntity.getId(), messageProtocolEntity.getFrom())
 
         wordformean = messageProtocolEntity.getBody().lower()
-        response = self.GetCurrentScore(wordformean)
+        response = self.dictionaryword(wordformean)
 
         outgoingMessageProtocolEntity = TextMessageProtocolEntity(
                 response,
@@ -33,7 +33,7 @@ class EchoLayer(YowInterfaceLayer):
         ack = OutgoingAckProtocolEntity(entity.getId(), "receipt", "delivery", entity.getFrom())
         self.toLower(ack)
 
-    def GetCurrentScore(self, word):
+    def dictionaryword(self, word):
 
         url = "https://montanaflynn-dictionary.p.mashape.com/define?word=" + word
 
@@ -44,19 +44,24 @@ class EchoLayer(YowInterfaceLayer):
                 "Accept": "application/json"
             }
         )
-
-        resp = word + '\n\n'
-
-        data = json.dumps(response.body, separators=(',',':'))
-        meanings = (json.loads(data))["definitions"]
         
-        count = 0
-        for meaning in meanings:
-            count = count + 1
-            resp = resp + 'm' + str(count) +' : ' + str(meaning["text"]) + '\n\n'
+        
+        resp = word + '\n\n'
+        
+        if ' ' in word:
+                text_response = "Dictionary word does not allow 'Space'"
+        else:
 
-        # Create Text response
-        text_response = str(resp)
+            data = json.dumps(response.body, separators=(',',':'))
+            meanings = (json.loads(data))["definitions"]
+        
+            count = 0
+            for meaning in meanings:
+                count = count + 1
+                resp = resp + 'm' + str(count) +' : ' + str(meaning["text"].encode('ascii', 'ignore')) + '\n\n'
+
+            # Create Text response
+            text_response = str(resp)
 
         #Return details
         return str(text_response)

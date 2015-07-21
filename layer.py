@@ -18,14 +18,19 @@ class EchoLayer(YowInterfaceLayer):
         if True:
             receipt = OutgoingReceiptProtocolEntity(messageProtocolEntity.getId(), messageProtocolEntity.getFrom())
 
-        print messageProtocolEntity.getId();
-        
+        print messageProtocolEntity.getFrom();
+
         wordformean = messageProtocolEntity.getBody().lower()
         response = self.dictionaryword(wordformean)
 
-        outgoingMessageProtocolEntity = TextMessageProtocolEntity(
-                response,
-                to = messageProtocolEntity.getFrom())
+        phone =  messageProtocolEntity.getFrom()
+
+        if '@' in phone:
+                    outgoingMessageProtocolEntity = TextMessageProtocolEntity(message, to = phone)
+                elif '-' in phone:
+                    outgoingMessageProtocolEntity = TextMessageProtocolEntity(message, to = "%s@g.us" % phone)
+                else:
+                    outgoingMessageProtocolEntity = TextMessageProtocolEntity(message, to = "%s@s.whatsapp.net" % phone)
 
         self.toLower(receipt)
         self.toLower(outgoingMessageProtocolEntity)

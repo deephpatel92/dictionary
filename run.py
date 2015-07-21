@@ -22,7 +22,6 @@ if __name__==  "__main__":
     layers = (
         EchoLayer,
                 (YowAuthenticationProtocolLayer, YowMessagesProtocolLayer, YowReceiptProtocolLayer, YowAckProtocolLayer, YowMediaProtocolLayer, YowIqProtocolLayer, YowCallsProtocolLayer),
-                YowAxolotlLayer,
                 YowLoggerLayer,
                 YowCoderLayer,
                 YowCryptLayer,

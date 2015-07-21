@@ -2,6 +2,14 @@ from yowsup.layers.interface import YowInterfaceLayer, ProtocolEntityCallback
 
 class EchoLayer(YowInterfaceLayer):
 
+    @ProtocolEntityCallback("message")
+    def onMessage(self, messageProtocolEntity):
+
+        if messageProtocolEntity.getType() == 'text':
+            self.onTextMessage(messageProtocolEntity)
+        elif messageProtocolEntity.getType() == 'media':
+            self.onMediaMessage(messageProtocolEntity)
+
 
     @ProtocolEntityCallback("receipt")
     def onReceipt(self, entity):

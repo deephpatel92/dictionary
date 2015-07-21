@@ -9,7 +9,7 @@ class EchoLayer(YowInterfaceLayer):
             self.onTextMessage(messageProtocolEntity)
         elif messageProtocolEntity.getType() == 'media':
             self.onMediaMessage(messageProtocolEntity)
-            
+
         self.toLower(messageProtocolEntity.ack())
         self.toLower(messageProtocolEntity.ack(True))
 
@@ -20,7 +20,7 @@ class EchoLayer(YowInterfaceLayer):
 
     def onTextMessage(self,messageProtocolEntity):
         # just print info
-        print("Echoing %s to %s" % (messageProtocolEntity.getBody(), messageProtocolEntity.getFrom(False)))
+        print("Echoing %s " % (messageProtocolEntity.getBody()))
 
     def onMediaMessage(self, messageProtocolEntity):
         # just print info

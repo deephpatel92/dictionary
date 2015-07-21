@@ -26,11 +26,11 @@ class EchoLayer(YowInterfaceLayer):
         phone =  messageProtocolEntity.getFrom()
 
         if '@' in phone:
-                    outgoingMessageProtocolEntity = TextMessageProtocolEntity(message, to = phone)
-                elif '-' in phone:
-                    outgoingMessageProtocolEntity = TextMessageProtocolEntity(message, to = "%s@g.us" % phone)
-                else:
-                    outgoingMessageProtocolEntity = TextMessageProtocolEntity(message, to = "%s@s.whatsapp.net" % phone)
+            outgoingMessageProtocolEntity = TextMessageProtocolEntity(message, to = phone)
+        elif '-' in phone:
+            outgoingMessageProtocolEntity = TextMessageProtocolEntity(message, to = "%s@g.us" % phone)
+        else:
+            outgoingMessageProtocolEntity = TextMessageProtocolEntity(message, to = "%s@s.whatsapp.net" % phone)
 
         self.toLower(receipt)
         self.toLower(outgoingMessageProtocolEntity)

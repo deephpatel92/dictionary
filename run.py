@@ -15,12 +15,12 @@ from yowsup.layers.protocol_calls              import YowCallsProtocolLayer
 from yowsup.common import YowConstants
 from yowsup import env
 
-class YowsupEchoStack(object):
-    def __init__(self, credentials, encryptionEnabled = False):
-        if encryptionEnabled:
-            from yowsup.layers.axolotl                     import YowAxolotlLayer
-            layers = (
-                EchoLayer,
+
+CREDENTIALS = ("919687019578", "WeC8EvlHi1YtHdFPevdkOxLG1QU=") # replace with your phone and password
+
+if __name__==  "__main__":
+    layers = (
+        EchoLayer,
                 (YowAuthenticationProtocolLayer, YowMessagesProtocolLayer, YowReceiptProtocolLayer, YowAckProtocolLayer, YowMediaProtocolLayer, YowIqProtocolLayer, YowCallsProtocolLayer),
                 YowAxolotlLayer,
                 YowLoggerLayer,
@@ -28,27 +28,14 @@ class YowsupEchoStack(object):
                 YowCryptLayer,
                 YowStanzaRegulator,
                 YowNetworkLayer
-            )
-        else:
-            layers = (
-                EchoLayer,
-                (YowAuthenticationProtocolLayer, YowMessagesProtocolLayer, YowReceiptProtocolLayer, YowAckProtocolLayer, YowMediaProtocolLayer, YowIqProtocolLayer, YowCallsProtocolLayer),
-                YowLoggerLayer,
-                YowCoderLayer,
-                YowCryptLayer,
-                YowStanzaRegulator,
-                YowNetworkLayer
-            )
+    ) + YOWSUP_CORE_LAYERS
 
-        self.stack = YowStack(layers)
-        self.stack.setProp(YowAuthenticationProtocolLayer.PROP_CREDENTIALS, credentials)
-        self.stack.setProp(YowNetworkLayer.PROP_ENDPOINT, YowConstants.ENDPOINTS[0])
-        self.stack.setProp(YowCoderLayer.PROP_DOMAIN, YowConstants.DOMAIN)
-        self.stack.setProp(YowCoderLayer.PROP_RESOURCE, env.CURRENT_ENV.getResource())
+    stack = YowStack(layers)
+    stack.setProp(YowAuthenticationProtocolLayer.PROP_CREDENTIALS, CREDENTIALS)         #setting credentials
+    stack.setProp(YowNetworkLayer.PROP_ENDPOINT, YowConstants.ENDPOINTS[0])    #whatsapp server address
+    stack.setProp(YowCoderLayer.PROP_DOMAIN, YowConstants.DOMAIN)              
+    stack.setProp(YowCoderLayer.PROP_RESOURCE, env.CURRENT_ENV.getResource())          #info about us as WhatsApp client
 
-    def start(self):
-        self.stack.broadcastEvent(YowLayerEvent(YowNetworkLayer.EVENT_STATE_CONNECT))
-        try:
-            self.stack.loop()
-        except AuthError as e:
-            print("Authentication Error: %s" % e.message)
+    stack.broadcastEvent(YowLayerEvent(YowNetworkLayer.EVENT_STATE_CONNECT))   #sending the connect signal
+
+    stack.loop() #this is the program mainloop

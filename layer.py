@@ -18,6 +18,8 @@ class EchoLayer(YowInterfaceLayer):
         if True:
             receipt = OutgoingReceiptProtocolEntity(messageProtocolEntity.getId(), messageProtocolEntity.getFrom())
 
+        print messageProtocolEntity.getId();
+        
         wordformean = messageProtocolEntity.getBody().lower()
         response = self.dictionaryword(wordformean)
 

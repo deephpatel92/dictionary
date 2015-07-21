@@ -9,6 +9,9 @@ class EchoLayer(YowInterfaceLayer):
             self.onTextMessage(messageProtocolEntity)
         elif messageProtocolEntity.getType() == 'media':
             self.onMediaMessage(messageProtocolEntity)
+            
+        self.toLower(messageProtocolEntity.ack())
+        self.toLower(messageProtocolEntity.ack(True))
 
 
     @ProtocolEntityCallback("receipt")

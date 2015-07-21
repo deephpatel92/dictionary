@@ -27,8 +27,8 @@ if __name__==  "__main__":
                 YowCryptLayer,
                 YowStanzaRegulator,
                 YowNetworkLayer
-    ) + YOWSUP_CORE_LAYERS
-
+    ) 
+    
     stack = YowStack(layers)
     stack.setProp(YowAuthenticationProtocolLayer.PROP_CREDENTIALS, CREDENTIALS)         #setting credentials
     stack.setProp(YowNetworkLayer.PROP_ENDPOINT, YowConstants.ENDPOINTS[0])    #whatsapp server address
